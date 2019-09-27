@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import Form from './components/Form';
+import Countries from './components/Countries'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+class App extends Component {
+  state = {
+    countries: []
+  }
+  
+  getCountry = async (e) => {
+    const nameCounrty = e.target.elements.nameCounrty.value;
+    e.preventDefault();
+    const api_call = await fetch(`https://restcountries.eu/rest/v2/name/${nameCounrty}`)
+    const data = await api_call.json()
+    this.setState({ countries: data })
+    console.log(this.state.countries)
+    //console.log(nameCounrty)
+  }
+  render() {
+    return (
+      <div className='App'>
+        <header className='App-header'>
+          <h1 className='App-title'>County Search</h1>
+
+        </header>
+        <Form getCountry={this.getCountry}/>
+        <Countries countries={this.state.countries}/>
+      </div>
+    );
+  }
+};
 
 export default App;
